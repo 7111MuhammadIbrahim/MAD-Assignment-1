@@ -1,111 +1,79 @@
-package com.example.madassignment1;
+package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.*;
-import java.lang.Math;
+import android.os.Bundle;import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvDisplay;
-    private String input = "";
+    // Declare UI elements
+    EditText etNum1, etNum2;
+    Button btnAdd, btnSub, btnMul, btnDiv;
+    TextView tvResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set the UI layout for this Activity
         setContentView(R.layout.activity_main);
 
-        tvDisplay = findViewById(R.id.tvDisplay);
-        GridLayout grid = findViewById(R.id.gridLayout);
+        // Initialize UI elements by finding them in the layout
+        etNum1 = findViewById(R.id.etNum1);
+        etNum2 = findViewById(R.id.etNum2);
+        btnAdd = findViewById(R.id.btnAdd);
+        btnSub = findViewById(R.id.btnSub);
+        btnMul = findViewById(R.id.btnMul);
+        btnDiv = findViewById(R.id.btnDiv);
+        tvResult = findViewById(R.id.tvResult);
 
-        // Set click listeners for all buttons
-        for (int i = 0; i < grid.getChildCount(); i++) {
-            Button btn = (Button) grid.getChildAt(i);
-            btn.setOnClickListener(v -> handleInput(btn.getText().toString()));
-        }
-    }
+        // Create a single, shared OnClickListener for all operation buttons
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get text from EditTexts
+                String s1 = etNum1.getText().toString();
+                String s2 = etNum2.getText().toString();
 
-    private void handleInput(String value) {
-        switch (value) {
-            case "AC":
-                input = "";
-                tvDisplay.setText("0");
-                break;
-            case "=":
-                calculateResult();
-                break;
-            default:
-                input += value;
-                tvDisplay.setText(input);
-                break;
-        }
-    }
+                // Check if either input field is empty
+                if (s1.isEmpty() || s2.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter both numbers", Toast.LENGTH_SHORT).show();
+                    return; // Stop further execution
+                }
 
-    private void calculateResult() {
-        try {
-            double result = evaluateExpression(input);
-            tvDisplay.setText(String.valueOf(result));
-            input = String.valueOf(result);
-        } catch (Exception e) {
-            tvDisplay.setText("Error");
-            input = "";
-        }
-    }
+                // Convert text to numbers
+                double num1 = Double.parseDouble(s1);
+                double num2 = Double.parseDouble(s2);
+                double result = 0;
 
-    private double evaluateExpression(String expr) {
-        expr = expr.replace("×", "*").replace("÷", "/").replace("−", "-");
+                // Determine which button was clicked using an if-else if block
+                int id = v.getId();
+                if (id == R.id.btnAdd) {
+                    result = num1 + num2;
+                } else if (id == R.id.btnSub) {
+                    result = num1 - num2;
+                } else if (id == R.id.btnMul) {
+                    result = num1 * num2;
+                } else if (id == R.id.btnDiv) {
+                    // Handle division by zero
+                    if (num2 == 0) {
+                        Toast.makeText(MainActivity.this, "Cannot divide by zero", Toast.LENGTH_SHORT).show();
+                        return; // Stop further execution
+                    }
+                    result = num1 / num2;
+                }
 
-        if (expr.contains("sin")) return Math.sin(getNumber(expr, "sin"));
-        if (expr.contains("cos")) return Math.cos(getNumber(expr, "cos"));
-        if (expr.contains("tan")) return Math.tan(getNumber(expr, "tan"));
-        if (expr.contains("log")) return Math.log10(getNumber(expr, "log"));
-        if (expr.contains("ln"))  return Math.log(getNumber(expr, "ln"));
-        if (expr.contains("√"))   return Math.sqrt(getNumber(expr, "√"));
-        if (expr.contains("^")) {
-            String[] parts = expr.split("\\^");
-            return Math.pow(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
-        }
-        if (expr.contains("!")) {
-            int n = Integer.parseInt(expr.replace("!", ""));
-            return factorial(n);
-        }
-
-        return simpleEval(expr);
-    }
-
-    private double getNumber(String expr, String op) {
-        return Double.parseDouble(expr.replace(op, ""));
-    }
-
-    private double simpleEval(String exp) {
-        char[] ops = {'+', '-', '*', '/'};
-        for (char op : ops) {
-            int idx = exp.indexOf(op);
-            if (idx != -1) {
-                double a = Double.parseDouble(exp.substring(0, idx));
-                double b = Double.parseDouble(exp.substring(idx + 1));
-                return applyOp(a, b, op);
+                // Display the result in the TextView
+                tvResult.setText("Result: " + result);
             }
-        }
-        return Double.parseDouble(exp);
-    }
+        };
 
-    private double applyOp(double a, double b, char op) {
-        switch (op) {
-            case '+': return a + b;
-            case '-': return a - b;
-            case '*': return a * b;
-            case '/':
-                if (b == 0) throw new ArithmeticException("Division by zero");
-                return a / b;
-        }
-        return b;
-    }
-
-    private int factorial(int n) {
-        if (n < 0) throw new ArithmeticException("Invalid factorial");
-        int result = 1;
-        for (int i = 1; i <= n; i++) result *= i;
-        return result;
-    }
+        // Attach the listener to each button
+        btnAdd.setOnClickListener(listener);
+        btnSub.setOnClickListener(listener);
+        btnMul.setOnClickListener(listener);
+        btnDiv.setOnClickListener(listener);
+    }
 }
