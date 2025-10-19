@@ -6,7 +6,7 @@
     android:background="#000000"
     android:padding="8dp">
 
-    <!-- Display -->
+    
     <TextView
         android:id="@+id/tvDisplay"
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         android:textSize="48sp"
         android:textStyle="bold" />
 
-    <!-- Buttons Grid -->
+   
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:layout_gravity="bottom"
         android:layout_marginTop="8dp">
 
-        <!-- Row 1 -->
+        
         <Button android:text="AC" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
         <Button android:text="√" android:layout_width="0dp" android:layout_height="80dp"
@@ -40,7 +40,7 @@
         <Button android:text="÷" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
 
-        <!-- Row 2 -->
+        
         <Button android:text="7" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
         <Button android:text="8" android:layout_width="0dp" android:layout_height="80dp"
@@ -50,7 +50,7 @@
         <Button android:text="×" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
 
-        <!-- Row 3 -->
+      
         <Button android:text="4" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
         <Button android:text="5" android:layout_width="0dp" android:layout_height="80dp"
@@ -60,7 +60,7 @@
         <Button android:text="−" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
 
-        <!-- Row 4 -->
+    
         <Button android:text="1" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
         <Button android:text="2" android:layout_width="0dp" android:layout_height="80dp"
@@ -70,7 +70,7 @@
         <Button android:text="+" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
 
-        <!-- Row 5 -->
+   
         <Button android:text="0" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
         <Button android:text="." android:layout_width="0dp" android:layout_height="80dp"
@@ -80,7 +80,7 @@
         <Button android:text="%" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
 
-        <!-- Row 6 -->
+   
         <Button android:text="sin" android:layout_width="0dp" android:layout_height="80dp"
             android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
         <Button android:text="cos" android:layout_width="0dp" android:layout_height="80dp"
