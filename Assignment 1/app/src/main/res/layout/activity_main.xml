@@ -1,93 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#000000"
-    android:padding="8dp">
+    tools:context=".MainActivity">
 
-    <!-- Display -->
-    <TextView
-        android:id="@+id/tvDisplay"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="#000000"
-        android:gravity="end|bottom"
-        android:padding="16dp"
-        android:text="0"
-        android:textColor="#FFFFFF"
-        android:textSize="48sp"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- Buttons Grid -->
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:columnCount="4"
-        android:rowCount="6"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="8dp">
+        <!-- Question 1 -->
+        <TextView
+            android:id="@+id/q1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. Which nutrient is the main source of energy for the body?"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <!-- Row 1 -->
-        <Button android:text="AC" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="√" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="x²" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="÷" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
+        <RadioGroup
+            android:id="@+id/rg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/q1a1" android:text="Protein" />
+            <RadioButton android:id="@+id/q1a2" android:text="Fat" />
+            <RadioButton android:id="@+id/q1a3" android:text="Carbohydrates" />
+            <RadioButton android:id="@+id/q1a4" android:text="Vitamins" />
+        </RadioGroup>
 
-        <!-- Row 2 -->
-        <Button android:text="7" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="8" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="9" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="×" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
+        <!-- Question 2 -->
+        <TextView
+            android:id="@+id/q2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. How many calories are in one gram of carbohydrates?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
-        <!-- Row 3 -->
-        <Button android:text="4" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="5" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="6" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="−" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
+        <RadioGroup
+            android:id="@+id/rg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/q2a1" android:text="3" />
+            <RadioButton android:id="@+id/q2a2" android:text="4" />
+            <RadioButton android:id="@+id/q2a3" android:text="5" />
+            <RadioButton android:id="@+id/q2a4" android:text="6" />
+        </RadioGroup>
 
-        <!-- Row 4 -->
-        <Button android:text="1" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="2" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="3" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="+" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
+        <!-- Question 3 -->
+        <TextView
+            android:id="@+id/q3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3. Which vitamin is mainly found in citrus fruits like oranges?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
-        <!-- Row 5 -->
-        <Button android:text="0" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="." android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#1C1C1C" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="=" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#FF9500" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="%" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
+        <RadioGroup
+            android:id="@+id/rg3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/q3a1" android:text="Vitamin A" />
+            <RadioButton android:id="@+id/q3a2" android:text="Vitamin D" />
+            <RadioButton android:id="@+id/q3a3" android:text="Vitamin C" />
+            <RadioButton android:id="@+id/q3a4" android:text="Vitamin B12" />
+        </RadioGroup>
 
-        <!-- Row 6 -->
-        <Button android:text="sin" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="cos" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="tan" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
-        <Button android:text="ln" android:layout_width="0dp" android:layout_height="80dp"
-            android:layout_columnWeight="1" android:background="#505050" android:textColor="#FFFFFF" android:textSize="20sp"/>
-    </GridLayout>
-</LinearLayout>
+        <!-- Question 4 -->
+        <TextView
+            android:id="@+id/q4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4. Which fruit is known for having a red outer skin and sweet taste?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <RadioGroup
+            android:id="@+id/rg4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/q4a1" android:text="Banana" />
+            <RadioButton android:id="@+id/q4a2" android:text="Apple" />
+            <RadioButton android:id="@+id/q4a3" android:text="Grape" />
+            <RadioButton android:id="@+id/q4a4" android:text="Mango" />
+        </RadioGroup>
+
+        <!-- Question 5 -->
+        <TextView
+            android:id="@+id/q5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5. Which scientist is known as the father of modern food preservation?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <RadioGroup
+            android:id="@+id/rg5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/q5a1" android:text="Louis Pasteur" />
+            <RadioButton android:id="@+id/q5a2" android:text="James Gosling" />
+            <RadioButton android:id="@+id/q5a3" android:text="Alexander Fleming" />
+            <RadioButton android:id="@+id/q5a4" android:text="Charles Darwin" />
+        </RadioGroup>
+
+        <!-- Submit and Result -->
+        <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit Quiz"
+            android:layout_marginTop="24dp" />
+
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your score will appear here"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>
