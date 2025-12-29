@@ -69,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("year", book.getYear());
                 startActivity(intent);
             }
+
+            @Override
+            public void onLongItemClick(int position) {
+                deleteBook(position);
+            }
         });
     }
 
@@ -79,9 +84,13 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
-        } else {
-            loadBooks();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadBooks();
     }
 
     @Override
@@ -126,6 +135,32 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void deleteBook(int position) {
+        Book book = bookList.get(position);
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Book")
+                .setMessage("Are you sure you want to delete this book?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        db.collection("books").document(book.getId()).delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(MainActivity.this, "Book deleted", Toast.LENGTH_SHORT).show();
+                                            loadBooks();
+                                        } else {
+                                            Toast.makeText(MainActivity.this, "Error deleting book", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void deleteAccount() {
