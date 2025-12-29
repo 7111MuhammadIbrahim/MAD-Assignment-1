@@ -1,111 +1,160 @@
 package com.example.madassignment1;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.*;
-import java.lang.Math;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvDisplay;
-    private String input = "";
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+
+    private RecyclerView recyclerView;
+    private BookAdapter bookAdapter;
+    private List<Book> bookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvDisplay = findViewById(R.id.tvDisplay);
-        GridLayout grid = findViewById(R.id.gridLayout);
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
-        // Set click listeners for all buttons
-        for (int i = 0; i < grid.getChildCount(); i++) {
-            Button btn = (Button) grid.getChildAt(i);
-            btn.setOnClickListener(v -> handleInput(btn.getText().toString()));
-        }
-    }
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        bookList = new ArrayList<>();
+        bookAdapter = new BookAdapter(bookList);
+        recyclerView.setAdapter(bookAdapter);
 
-    private void handleInput(String value) {
-        switch (value) {
-            case "AC":
-                input = "";
-                tvDisplay.setText("0");
-                break;
-            case "=":
-                calculateResult();
-                break;
-            default:
-                input += value;
-                tvDisplay.setText(input);
-                break;
-        }
-    }
-
-    private void calculateResult() {
-        try {
-            double result = evaluateExpression(input);
-            tvDisplay.setText(String.valueOf(result));
-            input = String.valueOf(result);
-        } catch (Exception e) {
-            tvDisplay.setText("Error");
-            input = "";
-        }
-    }
-
-    private double evaluateExpression(String expr) {
-        expr = expr.replace("×", "*").replace("÷", "/").replace("−", "-");
-
-        if (expr.contains("sin")) return Math.sin(getNumber(expr, "sin"));
-        if (expr.contains("cos")) return Math.cos(getNumber(expr, "cos"));
-        if (expr.contains("tan")) return Math.tan(getNumber(expr, "tan"));
-        if (expr.contains("log")) return Math.log10(getNumber(expr, "log"));
-        if (expr.contains("ln"))  return Math.log(getNumber(expr, "ln"));
-        if (expr.contains("√"))   return Math.sqrt(getNumber(expr, "√"));
-        if (expr.contains("^")) {
-            String[] parts = expr.split("\\^");
-            return Math.pow(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
-        }
-        if (expr.contains("!")) {
-            int n = Integer.parseInt(expr.replace("!", ""));
-            return factorial(n);
-        }
-
-        return simpleEval(expr);
-    }
-
-    private double getNumber(String expr, String op) {
-        return Double.parseDouble(expr.replace(op, ""));
-    }
-
-    private double simpleEval(String exp) {
-        char[] ops = {'+', '-', '*', '/'};
-        for (char op : ops) {
-            int idx = exp.indexOf(op);
-            if (idx != -1) {
-                double a = Double.parseDouble(exp.substring(0, idx));
-                double b = Double.parseDouble(exp.substring(idx + 1));
-                return applyOp(a, b, op);
+        FloatingActionButton fab = findViewById(R.id.fab_add_book);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, AddEditBookActivity.class));
             }
-        }
-        return Double.parseDouble(exp);
+        });
+
+        bookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Book book = bookList.get(position);
+                Intent intent = new Intent(MainActivity.this, AddEditBookActivity.class);
+                intent.putExtra("book_id", book.getId());
+                intent.putExtra("title", book.getTitle());
+                intent.putExtra("author", book.getAuthor());
+                intent.putExtra("isbn", book.getIsbn());
+                intent.putExtra("year", book.getYear());
+                startActivity(intent);
+            }
+        });
     }
 
-    private double applyOp(double a, double b, char op) {
-        switch (op) {
-            case '+': return a + b;
-            case '-': return a - b;
-            case '*': return a * b;
-            case '/':
-                if (b == 0) throw new ArithmeticException("Division by zero");
-                return a / b;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        } else {
+            loadBooks();
         }
-        return b;
     }
 
-    private int factorial(int n) {
-        if (n < 0) throw new ArithmeticException("Invalid factorial");
-        int result = 1;
-        for (int i = 1; i <= n; i++) result *= i;
-        return result;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_logout) {
+            mAuth.signOut();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+            return true;
+        } else if (id == R.id.action_delete_account) {
+            deleteAccount();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void loadBooks() {
+        db.collection("books")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            bookList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Book book = document.toObject(Book.class);
+                                book.setId(document.getId());
+                                bookList.add(book);
+                            }
+                            bookAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Error getting books.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void deleteAccount() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Account")
+                    .setMessage("Are you sure you want to delete your account? This action is irreversible.")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            user.delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(MainActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
+                                                mAuth.signOut();
+                                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                                finish();
+                                            } else {
+                                                Toast.makeText(MainActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        }
     }
 }
